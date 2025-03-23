@@ -1,3 +1,59 @@
+🔑 Login (POST /login)
+1️⃣ Client Request
+The user sends a POST request with emailId and password in the body.
+
+2️⃣ Server Processing
+Fetch User: Finds the user in MongoDB using User.findOne({ emailId }).
+
+Verify Password:
+
+Compares the input password with the hashed one in the database using bcrypt.compare(password, user.password).
+
+Generate JWT Token:
+
+If passwords match, a JWT token is created using jwt.sign({ _id: user._id }, "Gaurav@123").
+
+This token acts as a session identifier.
+
+Set Cookie:
+
+The server stores the token in an HTTP cookie (res.cookie("token", token)).
+
+Send Response:
+
+If successful: res.send('Yes Gaurav, password is correct').
+
+If failed: Returns an error (Incorrect email or Wrong password).
+
+👤 Profile (GET /profile)
+1️⃣ Client Request
+The user sends a GET request to /profile.
+
+The browser automatically includes the JWT token stored in cookies.
+
+2️⃣ Server Processing
+Extract Token:
+
+Reads cookies from req.cookies and extracts token.
+
+Verify Token:
+
+Decodes it using jwt.verify(token, "Gaurav@123").
+
+If valid, it returns the _id of the logged-in user.
+
+Fetch User Data:
+
+Uses User.findById(_id) to get the user's details from MongoDB.
+
+Send Response:
+
+Returns user data as a JSON response.
+
+If token verification fails (invalid/expired), it should send an Unauthorized error
+
+
+// the code starts from here
 const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
@@ -61,9 +117,23 @@ app.post('/login', async (req,res)=>{
    }
 })
 // cookie-parser
-app.get('/profile',userAuth,async (req,res)=>{
+app.get('/profile',async (req,res)=>{
        try {
-        const user=req.user
+        const cookiei= req.cookies
+
+       const {token}=cookiei
+      // verifying the jwt token
+       const decodedmessage= await jwt.verify(token,"Gaurav@123")
+       const {_id}=decodedmessage
+      //  console.log("the loggedin userid is "+_id) 
+      /*
+         its showing the details of users with id 
+       */
+       const user=await User.findById(_id)
+       if(!user){
+        throw new Error("Invlaid credintials");
+        
+       }
        res.send(user);
        } catch (error) {
         res.status(340).send('please gaurav enter correct details')

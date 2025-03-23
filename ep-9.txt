@@ -1,13 +1,9 @@
-const express = require("express");
+ const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
-const cookieparser=require('cookie-parser')
-const jwt= require('jsonwebtoken')
 const connectDB = require("./src/config/database");
 const User = require("./src/models/user");
-const {userAuth}=require('./src/middlewares/auth')
 app.use(express.json());
-app.use(cookieparser())
 const { validateSignUpData } = require("./src/utils/validation");
 
 app.post("/signup", async (req, res) => {
@@ -44,13 +40,6 @@ app.post('/login', async (req,res)=>{
     }
     const ispasswordValid= await bcrypt.compare(password,user.password)
     if(ispasswordValid){
-            // Creating a jwt token
-            const token= await jwt.sign({_id:user._id},"Gaurav@123")
-            console.log(token);
-            
-
-            // Server is creating the cookie 
-        res.cookie("token",token)
         res.send('Yes gaurav ,password is correct')
     }
     else{
@@ -60,19 +49,7 @@ app.post('/login', async (req,res)=>{
             res.status(439).send("gaurav error : "+error.message)
    }
 })
-// cookie-parser
-app.get('/profile',userAuth,async (req,res)=>{
-       try {
-        const user=req.user
-       res.send(user);
-       } catch (error) {
-        res.status(340).send('please gaurav enter correct details')
-       }
-       
-        // console.log(cookiei);
-        // res.send('reading cookies')
-        
-})
+
 
 
 

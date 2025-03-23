@@ -1,0 +1,19 @@
+const express=require('express')
+const app=express()
+
+
+app.get('/hello/admin',(req,res)=>{
+try {
+    throw new Error("you got ");
+    res.send('you are now happy')
+} catch (error) {
+    res.status(499).send('please contact the support team')
+}
+    
+})
+app.get('/hello/gaurav',(req,res)=>{
+    res.send('dsfslkflsklksl')
+})
+
+
+app.listen(4000)

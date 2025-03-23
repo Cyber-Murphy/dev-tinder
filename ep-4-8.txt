@@ -1,0 +1,110 @@
+const express=require('express')
+const app=express()
+const connectDB=require('./src/config/database')
+const User=require('./src/models/user')
+app.use(express.json())
+
+app.post('/signup', async(req,res)=>{
+    
+    const user=new User(req.body)
+    
+    await user.save()
+    res.send('database created successfully')
+})
+
+// find by email the id
+app.get('/user',async (req,res)=>{
+    const Useremail=req.body.emailId
+    try {
+        const users= await User.find({emailId:Useremail})
+      if (users.length===0) {
+        res.status(404).send('error occured gaurav') 
+      }else{
+
+          res.send(users)
+      }
+    } catch (error) {
+        res.status(404).send('error occured gaurav')
+    }
+})
+
+// feed - find every name
+
+app.get('/feed', async (req,res)=>{
+    try {
+       const h= await User.find({})
+       res.send(h)
+
+    } catch (error) {
+        res.status(404).send('error occured gaurav')
+
+    }
+})
+// find the unquie email by using the findOne
+
+app.get('/findemail' ,async (req,res)=>{
+            const useremail=req.body.emailId
+            try {
+                console.log(useremail);
+                const users=await User.findOne({emailId:useremail})
+                
+                res.send(users)
+             } catch (error) {
+                res.status(404).send('gaurav error occuerd')
+             }
+})
+// delete a user by its id
+app.delete('/deleteuser', async (req,res)=>{
+    const userid= req.body.userId
+    try {
+        
+        const deleted_user=await User.findByIdAndDelete(userid)
+        res.send( 'user is deleted gaurav')
+    } catch (error) {
+        res.status(499).send('errror occured gaurav')
+    }
+
+})
+// find by id and update
+app.patch('/update', async (req,res)=>{
+    const userid=req.body.userId
+    const data=req.body
+    const skill=req.body.skills
+    try {
+        const updateAllowed=["gender","age","userId","skills"]
+        const isUpdateAllowed= Object.keys(data).every((k)=>updateAllowed.includes(k))
+        if(!isUpdateAllowed){
+            throw new Error("update not allowed gaurav");
+            
+        }
+        const lenskill= skill.length
+        if(lenskill!=3){
+            throw new Error("please enter only 3 skills");
+            
+        }
+
+        const update=await User.findByIdAndUpdate(userid,data,{
+            returndocument:'after',
+            runValidators:true
+        })
+        res.send('updated successfully')
+    } catch (error) {
+        console.log(error);
+        
+        res.status(333).send('error gaurav has been occured')
+    }
+})
+
+
+connectDB().then(()=>{
+    console.log("database connected successfully");
+    app.listen(3000, ()=>{
+        console.log('port is successfully connected');
+        
+    })
+    
+}).catch((error)=>{
+    console.error('database not connected successfully');
+    
+})
+
