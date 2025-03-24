@@ -1,5 +1,7 @@
 const mongoose=require('mongoose')
 const validator=require('validator')
+const jwt=require('jsonwebtoken')
+const bcrypt=require('bcrypt')
 const userSchema= mongoose.Schema({
     firstName:{
         type:String,
@@ -56,4 +58,17 @@ const userSchema= mongoose.Schema({
     
     
 },{timestamps:true})
+// Creating a instance method of userschema for jwt so that it can offload the large code in other like /login etc
+userSchema.methods.getJwt=  async function () {
+    const user=this
+    const token= await jwt.sign({_id:user._id}, "Gaurav@123")
+    return token
+}
+
+userSchema.methods.validatePassword= async function(passwordByUser){
+    const user=this
+    const passwordHash=user.password
+    const ispasswordValid= await bcrypt.compare(passwordByUser,passwordHash)
+    return ispasswordValid
+}
 module.exports=mongoose.model('User',userSchema)

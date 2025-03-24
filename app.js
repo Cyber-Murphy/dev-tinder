@@ -42,10 +42,16 @@ app.post('/login', async (req,res)=>{
     if(!user){
         throw new Error("Incorrect email , please enter the correct");        
     }
-    const ispasswordValid= await bcrypt.compare(password,user.password)
+    // i have created this  of user instance method 
+    const ispasswordValid= await user.validatePassword(password)
+    // date 22/3/25 ,const ispasswordValid= await bcrypt.compare(password,user.password) , date -> 23/3/25 This is went to now userschema instance methods 
     if(ispasswordValid){
+            
+          const token= await user.getJwt()  // this get the creating the jwt
+      
             // Creating a jwt token
-            const token= await jwt.sign({_id:user._id},"Gaurav@123")
+
+            // date 22/3/25 const token= await jwt.sign({_id:user._id},"Gaurav@123") ,date -> 23/3/25 you can go to the user schema can find this there , we have offloaded thisone
             console.log(token);
             
 
@@ -74,6 +80,11 @@ app.get('/profile',userAuth,async (req,res)=>{
         
 })
 
+// Date 23/3/25  Send connection request
+app.post('/sendconnectionreq',userAuth, async (req,res)=>{
+   const user=req.user
+  res.send('Connection request sent by '+ user.firstName)
+})
 
 
 
