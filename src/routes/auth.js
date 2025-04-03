@@ -55,7 +55,7 @@ authRouter.post('/login', async (req,res)=>{
 
             // Server is creating the cookie 
         res.cookie("token",token)
-        res.send('Yes gaurav ,password is correct')
+        res.send(user)
     }
     else{
         throw new Error("wrong password")

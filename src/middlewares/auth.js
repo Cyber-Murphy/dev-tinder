@@ -25,7 +25,7 @@ const userAuth=async  (req,res,next)=>{
     req.user=user // this send all the user in the req.user.This stores the details of logged in user so that we can use in some other routes when this middleware is used.
     next()
     } catch (error) {
-        res.status(494).send("gaurav enter the correct details")
+         return res.status(494).send("gaurav enter the correct details")
     }
 }
 
