@@ -15,7 +15,7 @@ userRouter.get('/user/request/received', userAuth, async(req,res)=>{
             toUserId:LoggedinUser._id,
             status:"interested"
 
-        }).populate("fromUserId", ['firstName','lastName'])
+        }).populate("fromUserId", ['firstName','lastName','photo','age','gender','about'])
             const data = connectionrequest
             res.json({message:"the following received requests are", data})
             
@@ -37,7 +37,7 @@ userRouter.get('/user/connections', userAuth,async(req,res)=>{
             {fromUserId:loggedInUser._id ,status:"accepted"},
             {toUserId:loggedInUser._id,status:"accepted"}
         ]
-    }).populate("fromUserId",["firstName","lastName"]).populate("toUserId",["firstName","lastName"]) 
+    }).populate("fromUserId",["firstName","lastName","photo","age","gender","about"]).populate("toUserId",["firstName","lastName","photo","age","gender","about"]) 
     console.log(connectionrequest);
     
     const data=connectionrequest.map((row)=>{

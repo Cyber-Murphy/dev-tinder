@@ -10,7 +10,7 @@ profileRouter.get('/profile/view',userAuth,async (req,res)=>{
         const user=req.user
        res.send(user);
        } catch (error) {
-        res.status(340).send('please gaurav enter correct details')
+        return res.status(340).send('please gaurav enter correct details')
        }
        
         // console.log(cookiei);
@@ -41,15 +41,15 @@ profileRouter.patch('/profile/edit', userAuth,async (req,res)=>{
                 // res.send(`${LoggedInUser.firstName} 's profile is updated successfully`)
 
                 //2. industry standard of sending response
-                res.json({message:`${LoggedInUser.firstName} 's profile is updated successfully`,data:LoggedInUser})
                 await LoggedInUser.save()
+               return res.json({message:`${LoggedInUser.firstName} 's profile is updated successfully`,data:LoggedInUser})
 
 
                 
                 
 
         } catch (error) {
-                res.status(343).send("the error is "+ error.message)
+              return  res.status(343).send("the error is "+ error.message)
         }
 
 })
@@ -73,7 +73,7 @@ profileRouter.patch('/profile/edit/password', userAuth,async(req,res)=>{
 
 
                 } catch (error) {
-                        res.status(323).send('You have error  :' +error.message)
+                       return res.status(323).send('You have error  :' +error.message)
                 }
             //3. hash the new password and then replace them in db
                 

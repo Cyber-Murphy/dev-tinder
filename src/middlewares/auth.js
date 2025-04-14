@@ -11,7 +11,7 @@ const userAuth=async  (req,res,next)=>{
     // 2.Validate/verify that cookie
     const {token}= cookies
     if(!token){
-        throw new Error("Token is not found");
+        return res.status(401).send("Invalid Token , not found")
         
     }
     const decodedObj= await jwt.verify(token,"Gaurav@123")
