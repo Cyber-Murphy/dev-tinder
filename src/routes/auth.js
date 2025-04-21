@@ -58,7 +58,7 @@ authRouter.post("/login", async (req, res) => {
 
       // Creating a jwt token
 
-      // date 22/3/25 const token= await jwt.sign({_id:user._id},"Gaurav@123") ,date -> 23/3/25 you can go to the user schema can find this there , we have offloaded thisone
+      // date 22/3/25 const token= await jwt.sign({_id:user._id},"Gaurav@123") ,date -> 23/3/25 you can go to the user schema can find this there , we have offloaded this one
       console.log(token);
 
       // Server is creating the cookie

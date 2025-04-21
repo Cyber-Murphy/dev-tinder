@@ -64,7 +64,7 @@ const userSchema= mongoose.Schema({
 // Creating a instance method of userschema for jwt so that it can offload the large code in other like /login etc
 userSchema.methods.getJwt=  async function () {
     const user=this
-    const token= await jwt.sign({_id:user._id}, "Gaurav@123")
+    const token= await jwt.sign({_id:user._id}, process.env.JWT_SECRET_KEY)
     return token
 }
 

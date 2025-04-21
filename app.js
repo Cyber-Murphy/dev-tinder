@@ -3,6 +3,7 @@ const app = express();
 const cookieparser=require('cookie-parser')
 const connectDB = require("./src/config/database");
 const cors=require('cors')
+require('dotenv').config()
 
 // this cors we are coming from frontend 2/4/25
 app.use(cors({

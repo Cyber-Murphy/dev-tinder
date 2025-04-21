@@ -14,7 +14,7 @@ const userAuth=async  (req,res,next)=>{
         return res.status(401).send("Invalid Token , not found")
         
     }
-    const decodedObj= await jwt.verify(token,"Gaurav@123")
+    const decodedObj= await jwt.verify(token,process.env.JWT_SECRET_KEY)
     
     // 3. Find the user 
     const {_id}=decodedObj
