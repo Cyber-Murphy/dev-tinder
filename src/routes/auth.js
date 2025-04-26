@@ -65,7 +65,7 @@ authRouter.post("/login", async (req, res) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: false, // important for localhost
-        sameSite: "Lax",
+        sameSite: "Lax"
       });
       res.send(user);
     } else {
@@ -84,4 +84,4 @@ authRouter.post("/logout", async (req, res) => {
   // res.clearCookie('token').send('hello logout hogya')
 });
 
-module.exports = authRouter;
+module.exports = authRouter
