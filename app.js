@@ -7,9 +7,20 @@ require('dotenv').config()
 
 // this cors we are coming from frontend 2/4/25
 app.use(cors({
-  origin:"http://localhost:5173",
-  credentials:true
-}))
+  origin: function(origin, callback) {
+    const allowedOrigins = [
+      "http://localhost:5173",  // Localhost for development
+      "https://dev-tinder-web-zeta.vercel.app"  // Vercel frontend
+    ];
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,  // If you need to send cookies or authorization headers
+}));
 app.use(express.json());
 app.use(cookieparser())
 
